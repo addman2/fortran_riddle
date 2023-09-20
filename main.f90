@@ -21,14 +21,18 @@ program main
 
   call print_riddle()
 
+  call signal(2, signal_handler)
+
   print *, "Enter your answer to the riddle:"
   read *, key
 
-  print *, "Enter the text you want to be decrypted:"
-  read *, message
-  call decrypt(message)
+  do
+    print *, "Enter the text you want to be decrypted:"
+    read *, message
+    call decrypt(message)
 
-  print*, "Ot's answer is: ", trim(message)
+    print*, "Ot's answer is: ", trim(message)
+  end do
 
 contains
 
@@ -44,6 +48,19 @@ contains
     res = trim(operand1) // " " // trim(tmp)
 
   end function decipher_add_string
+
+  subroutine signal_handler
+    implicit none
+    character(len=100) :: multiline
+
+    multiline = new_line('a') //&
+                "I hope you had fun! Bye!" // &
+                new_line('a') // new_line('a')
+
+    print *, multiline
+    stop 0
+
+  end subroutine signal_handler
 
   subroutine load_alphabet()
     implicit none
